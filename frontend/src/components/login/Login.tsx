@@ -139,10 +139,8 @@ export default function LoginComponent() {
                 placeholder="Name"
               />
               {password != checkPassword ? (
-                <div className="text-center">
-                  <text className="text-xs underline font-bold decoration-red-500">
-                    Passwords do not match
-                  </text>
+                <div className="text-center text-xs underline font-bold decoration-red-500">
+                  Passwords do not match
                 </div>
               ) : (
                 <></>

@@ -8,10 +8,12 @@ import LoginComponent from "@/components/login/Login";
 export default function Home() {
   return (
     <>
-      <Link href="/questions">Questions</Link>
-      <Link href="/login">Login</Link>
-      {/* <LoginComponent/> */}
-      {/* <Profile/> */}
+      <div className="flex flex-col">
+        <Link href="/questions">Questions</Link>
+        <Link href="/login">Login</Link>
+        <Link href="/verify">Verify</Link>
+        <Link href="/profile">Profile</Link>
+      </div>
     </>
   );
 }
