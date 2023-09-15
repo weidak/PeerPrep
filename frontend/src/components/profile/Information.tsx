@@ -6,7 +6,7 @@ interface InformationProps {
 
 export default function Information({setIsChangePassword}: InformationProps) {
     return (
-    <>
+    <div>
         <header className="justify-center text-m underline">Edit your information:</header>
         <form className="justify-center max-w-xl space-y-4">
             <Input
@@ -28,6 +28,7 @@ export default function Information({setIsChangePassword}: InformationProps) {
                 label="Bio"
                 variant="underlined"
                 isClearable
+                maxLength={50}
             />
             <Input
                 label="Gender"
@@ -35,12 +36,12 @@ export default function Information({setIsChangePassword}: InformationProps) {
                 isClearable
             />
             <div className="flex flex-row justify-between">
-                <Button type="submit" color="secondary">
+                <Link className="cursor-pointer" onClick={() => {setIsChangePassword(true)}} >Change password</Link>
+                <Button type="submit" color="primary">
                     Save
                 </Button>
-                <Link className="cursor-pointer" onClick={() => {setIsChangePassword(true)}} >Change password</Link>
             </div>
         </form>
-    </>
+    </div>
     )
 }

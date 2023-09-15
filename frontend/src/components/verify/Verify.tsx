@@ -13,7 +13,7 @@ export default function VerifyComponent() {
                     <p>An OTP has been sent out to your email address. Please enter it below:</p>
                     <form className="flex flex-col space-y-10">  
                         <Input placeholder="OTP"/>
-                        <Button color="secondary">
+                        <Button color="primary">
                             Verify
                         </Button>
                     </form>  

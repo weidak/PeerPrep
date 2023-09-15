@@ -1,5 +1,5 @@
-import { Input, Button, Link } from "@nextui-org/react";
-import { useState } from "react";
+import { Input, Button, Link, Spacer } from "@nextui-org/react";
+import { useEffect, useState } from "react";
 
 interface ChangePasswordProps {
     setIsChangePassword: (isChangePassword: boolean) => void;
@@ -11,8 +11,16 @@ export default function ChangePassword({setIsChangePassword}: ChangePasswordProp
     const [newPassword, setNewPassword] = useState("");
     const [confirmNewPassword, setConfirmNewPassword] = useState("");
 
+    const [arePasswordsEqual, setArePasswordsEqual] = useState(false);
+    const [isPasswordDifferent, setIsPasswordDifferent] = useState(false);
+
+    useEffect(() => {
+        setArePasswordsEqual((newPassword == confirmNewPassword));
+        setIsPasswordDifferent(oldPassword === "" ? true : (oldPassword !== newPassword));
+    }, [oldPassword, newPassword, confirmNewPassword])
+
     return (
-        <>
+        <div>
             <form className="justify-center max-w-xl space-y-4">
                 <Input 
                     variant="bordered"
@@ -38,15 +46,15 @@ export default function ChangePassword({setIsChangePassword}: ChangePasswordProp
                         setConfirmNewPassword(e.currentTarget.value);
                     }}
                 />
-                { (newPassword != confirmNewPassword) ? (<div className="text-center text-xs underline font-bold decoration-red-500">Passwords do not match</div>) : (<> </>)}
-                { (oldPassword == newPassword) && (oldPassword != "") ? (<div className="text-center text-xs underline font-bold decoration-red-500">Old and new passwords cannot be the same</div>) : (<> </>)}
+                { arePasswordsEqual ? (<Spacer y={8}/>) : (<div className="text-center text-xs font-bold text-red-500">New passwords do not match</div>)}
+                { isPasswordDifferent ? (<Spacer y={8}/>) : (<div className="text-center text-xs font-bold text-red-500">Old and new passwords cannot be the same</div>)}
                 <div className="flex flex-row justify-between">
-                    <Button type="submit" color="secondary">
+                    <Link className="cursor-pointer" onClick={() => {setIsChangePassword(false)}}>Edit information</Link>
+                    <Button type="submit" color="primary">
                         Confirm
                     </Button>
-                    <Link className="cursor-pointer" onClick={() => {setIsChangePassword(false)}}>Edit information</Link>
                 </div>
             </form>
-        </>
+        </div>
     )
 }

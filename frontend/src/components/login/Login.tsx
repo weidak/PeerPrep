@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import {
   Card,
   Spacer,
@@ -9,13 +9,9 @@ import {
   Link,
   Divider,
   CardHeader,
+  Image
 } from "@nextui-org/react";
 import PeerPrepLogo from "../PeerPrepLogo";
-import SubmitLogo from "./SubmitLogo";
-import GithubLogo from "./GithubLogo";
-import GoogleLogo from "./GoogleLogo";
-import EyeHideLogo from "./EyeHideLogo";
-import EyeShowLogo from "./EyeShowLogo";
 
 export default function LoginComponent() {
   // States
@@ -30,6 +26,7 @@ export default function LoginComponent() {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isCheckPasswordVisible, setIsCheckPasswordVisible] = useState(false);
   const [isSignUp, setIsSignUp] = useState(false);
+  const [arePasswordsEqual, setArePasswordsEqual] = useState(false);
 
   // Toggles
   const togglePasswordVisibility = () =>
@@ -38,7 +35,9 @@ export default function LoginComponent() {
     setIsCheckPasswordVisible(!isCheckPasswordVisible);
   const toggleSignUp = () => setIsSignUp(!isSignUp);
 
-  // throw new Error("Not implemented");
+  useEffect(() => {
+    setArePasswordsEqual(!(password !== checkPassword && (password !== "" && checkPassword !== "")));
+  }, [password, checkPassword])
 
   return (
     <div className="flex items-center justify-center h-screen">
@@ -69,27 +68,16 @@ export default function LoginComponent() {
               setPassword(e.currentTarget.value);
             }}
             endContent={
-              isPasswordVisible ? (
                 <Button
                   variant="light"
-                  className="focus:outline-none"
+                  className="focus:outline-none p-2"
                   size="sm"
                   isIconOnly
                   onClick={togglePasswordVisibility}
                 >
-                  <EyeHideLogo height="50%" />
+                  { isPasswordVisible ? <Image src="/eye-hide.svg"/> : <Image src="/eye-show.svg"/>}
+                  
                 </Button>
-              ) : (
-                <Button
-                  variant="light"
-                  className="px-2 focus:outline-none"
-                  size="sm"
-                  isIconOnly
-                  onClick={togglePasswordVisibility}
-                >
-                  <EyeShowLogo height="50%" />
-                </Button>
-              )
             }
           />
           {isSignUp ? (
@@ -105,27 +93,15 @@ export default function LoginComponent() {
                   setCheckPassword(e.currentTarget.value);
                 }}
                 endContent={
-                  isCheckPasswordVisible ? (
                     <Button
                       variant="light"
-                      className="focus:outline-none"
+                      className="focus:outline-none p-2"
                       size="sm"
                       isIconOnly
                       onClick={() => toggleCheckPasswordVisibility()}
                     >
-                      <EyeHideLogo height="50%" />
+                      { isCheckPasswordVisible ? <Image src="/eye-hide.svg"/> : <Image src="/eye-show.svg"/> }
                     </Button>
-                  ) : (
-                    <Button
-                      variant="light"
-                      className="px-2 focus:outline-none"
-                      size="sm"
-                      isIconOnly
-                      onClick={() => toggleCheckPasswordVisibility()}
-                    >
-                      <EyeShowLogo height="50%" />
-                    </Button>
-                  )
                 }
               />
               <Spacer y={1} />
@@ -138,23 +114,24 @@ export default function LoginComponent() {
                 }}
                 placeholder="Name"
               />
-              {password != checkPassword ? (
-                <div className="text-center text-xs underline font-bold decoration-red-500">
+              
+              {arePasswordsEqual ? (
+                <Spacer y={6}/>
+              ) : (
+                <div className="text-red-500 text-center text-xs font-bold">
+                  <Spacer y={2} />
                   Passwords do not match
                 </div>
-              ) : (
-                <></>
               )}
-              <Spacer y={2} />
               <div className="flex flex-col items-center pt-5 space-y-5">
                 <Button
                   isLoading={isSubmitted}
                   type="submit"
-                  color="secondary"
+                  color="primary"
                   className="w-1/2"
                   onClick={() => setIsSubmitted(true)}
                 >
-                  {isSubmitted ? <></> : <>Sign Up</>}
+                  {isSubmitted ? null : <>Sign Up</>}
                 </Button>
                 <Link
                   className="cursor-pointer"
@@ -179,21 +156,22 @@ export default function LoginComponent() {
                   Remember me
                 </Checkbox>
                 <Button
+                  className="focus:outline-none p-1"
                   type="submit"
                   isLoading={isSubmitted}
                   isIconOnly
                   aria-label="Submit"
                   size="sm"
-                  color="secondary"
+                  color="primary"
                   onClick={() => {
                     setIsSubmitted(true);
                   }}
                   href="/verify"
                 >
                   {!isSubmitted ? (
-                    <SubmitLogo height="70%" width="70%" />
+                    <Image src="submit_button.svg"/>
                   ) : (
-                    <></>
+                    null
                   )}
                 </Button>
               </div>
@@ -218,11 +196,11 @@ export default function LoginComponent() {
               <div className="flex items-center justify-between h-10 w-100%">
                 <header className="text-xs">Sign in with:</header>
                 <div className="flex justify-between space-x-5 p-x-5">
-                  <Button isIconOnly variant="faded">
-                    <GithubLogo height="50%" />
+                  <Button className="p-2" isIconOnly variant="faded">
+                    <Image src="/github.svg"/>
                   </Button>
-                  <Button isIconOnly variant="faded">
-                    <GoogleLogo height="50%" />
+                  <Button className="p-2" isIconOnly variant="faded">
+                    <Image src="/google.svg"/>
                   </Button>
                 </div>
               </div>
