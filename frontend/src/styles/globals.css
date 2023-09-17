@@ -2,10 +2,3 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer components {
-  error {
-    @apply text-red-500;
-  }
-}
-
-
