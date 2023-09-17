@@ -1,19 +1,8 @@
-import Image from "next/image";
-import { Button } from "@nextui-org/button";
-import Link from "next/link";
-// import Login from "./(pages)/login/login";
-import LoginComponent from "@/components/login/Login";
-// import Profile from "@/components/dashboard/Profile";
+import Dashboard from "@/components/dashboard/Dashboard";
+import Landing from "@/components/landing/Landing";
+import { AuthService } from "@/helpers/auth/auth_api_wrappers";
 
 export default function Home() {
-  return (
-    <>
-      <div className="flex flex-col">
-        <Link href="/questions">Questions</Link>
-        <Link href="/login">Login</Link>
-        <Link href="/verify">Verify</Link>
-        <Link href="/profile">Profile</Link>
-      </div>
-    </>
-  );
+  const isAuthenticated = AuthService.validateAuth();
+  return isAuthenticated ? <Dashboard /> : <Landing />;
 }
