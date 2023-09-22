@@ -1,12 +1,21 @@
+// Used in api path, value should be in small caps
 export enum SERVICE {
-  USER = "USER",
-  QUESTION = "QUESTION",
+  USER = "user",
+  QUESTION = "question",
 }
 
-export enum ServiceLocalPorts {
-  USER = "5000",
-  QUESTION = "5100",
+export enum HTTP_METHODS {
+  GET = "GET",
+  POST = "POST",
+  PUT = "PUT",
+  DELETE = "DELETE",
 }
+
+// Port moved to .env.development
+// export enum ServiceLocalPorts {
+//   USER = "5000",
+//   QUESTION = "5100",
+// }
 
 export enum Status {
   ACTIVE = "ACTIVE",
