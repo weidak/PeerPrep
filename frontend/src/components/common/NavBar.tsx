@@ -10,18 +10,22 @@ import {
   DropdownMenu,
   DropdownSection,
   Button,
+  User,
 } from "@nextui-org/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { CLIENT_ROUTES } from "@/common/constants";
 import PeerPrepLogo from "@/components/common/PeerPrepLogo";
 import ProfilePictureAvatar from "./ProfilePictureAvatar";
 import { UserService } from "@/helpers/user/user_api_wrappers";
 import { MatchingService } from "@/helpers/matching/matching_api_wrappers";
+import { useAuthContext } from "@/providers/auth";
+import { CLIENT_ROUTES } from "@/common/constants";
 
 const NavBar = () => {
+  const {
+    user: { image },
+  } = useAuthContext();
   const router = useRouter();
-
   const handleEditProfileButtonPress = () => {
     router.push(CLIENT_ROUTES.PROFILE);
   };
@@ -48,7 +52,7 @@ const NavBar = () => {
         <Dropdown placement="bottom-end">
           <DropdownTrigger>
             <button className="outline-none">
-              <ProfilePictureAvatar />
+              <ProfilePictureAvatar profileUrl={image} />
             </button>
           </DropdownTrigger>
           <DropdownMenu aria-label="Profile Actions">
