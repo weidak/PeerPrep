@@ -71,8 +71,22 @@ export function LoginComponent() {
     arePasswordsEqual,
   ]);
 
+  useEffect(() => {
+    if (name !== "" && name.length < 2) {
+      setErrorMsg("Name has to contain at least 2 characters");
+    } else {
+      setErrorMsg("");
+    }
+  });
+
   async function submitNewUser(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+
+    if (errorMsg !== "") {
+      displayToast("Please fix the errors before submitting.", ToastType.ERROR);
+      return;
+    }
+
     setIsSubmitted(true);
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -214,6 +228,7 @@ export function LoginComponent() {
                 isClearable
                 isRequired
                 fullWidth
+                minLength={2}
                 onInput={(e) => {
                   setName(e.currentTarget.value);
                 }}
