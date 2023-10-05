@@ -14,7 +14,7 @@ import { UserService } from "@/helpers/user/user_api_wrappers";
 import { COMPLEXITY, LANGUAGE, TOPIC, ToastType } from "@/types/enums";
 import { StringUtils } from "@/utils/stringUtils";
 import MatchingLobby from "./MatchingLobby";
-import { useAuthContext } from "@/providers/auth";
+import { useAuthContext } from "@/contexts/auth";
 import Preference from "@/types/preference";
 import displayToast from "../common/Toast";
 
@@ -32,9 +32,7 @@ const MatchingCard = () => {
     currentPreferences || { languages: [], difficulties: [], topics: [] }
   );
 
-  const handleOnSelectionChange = (
-    event: ChangeEvent<HTMLSelectElement>
-  ) => {
+  const handleOnSelectionChange = (event: ChangeEvent<HTMLSelectElement>) => {
     if (event.target.value === "") {
       displayToast(`${event.target.name} is required`);
       return;
@@ -75,7 +73,9 @@ const MatchingCard = () => {
               selectedKeys={preferences.languages}
               onChange={handleOnSelectionChange}
               errorMessage={
-                preferences.languages.length == 0 && <span>Language is required</span>
+                preferences.languages.length == 0 && (
+                  <span>Language is required</span>
+                )
               }
             >
               {optionsLanguages.map((value) => (
@@ -95,7 +95,9 @@ const MatchingCard = () => {
               selectedKeys={preferences.difficulties}
               onChange={handleOnSelectionChange}
               errorMessage={
-                preferences.difficulties.length == 0 && <span>Difficulty is required</span>
+                preferences.difficulties.length == 0 && (
+                  <span>Difficulty is required</span>
+                )
               }
             >
               {optionsDifficulties.map((value) => (
@@ -115,7 +117,9 @@ const MatchingCard = () => {
               selectedKeys={preferences.topics}
               onChange={handleOnSelectionChange}
               errorMessage={
-                preferences.topics.length == 0 && <span>Topics is required</span>
+                preferences.topics.length == 0 && (
+                  <span>Topics is required</span>
+                )
               }
             >
               {optionsTopics.map((value) => (

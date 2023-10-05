@@ -7,8 +7,9 @@
     "dev:frontend": "npm run dev | pino-pretty",
     "dev:user-service": "cd ../backend/user-service && npm run dev",
     "dev:question-service": "cd ../backend/question-service && npm run dev",
+    "dev:collaboration-service": "cd ../backend/collaboration-service && npm run dev",
     "dev:matching-service": "cd ../backend/matching-service && npm run dev",
-    "dev-all": "concurrently \"npm run dev:frontend\" \"npm run dev:user-service\" \"npm run dev:question-service\" \"npm run dev:matching-service\"",
+    "dev-all": "concurrently \"npm run dev:frontend\" \"npm run dev:user-service\" \"npm run dev:question-service\" \"npm run dev:matching-service\" \"npm run dev:collaboration-service\"",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
@@ -46,11 +47,13 @@
     "socket.io-client": "^4.7.2",
     "swr": "^2.2.2",
     "tailwindcss": "3.3.3",
-    "typescript": "5.2.2"
+    "typescript": "5.2.2",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",
     "@types/d3": "^7.4.0",
+    "@types/uuid": "^9.0.4",
     "concurrently": "^8.2.1",
     "eslint-config-prettier": "^9.0.0",
     "pino-pretty": "^10.2.0",
