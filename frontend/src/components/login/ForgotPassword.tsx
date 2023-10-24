@@ -8,6 +8,7 @@ import {
   Divider,
   CardHeader,
   Image,
+  Link,
 } from "@nextui-org/react";
 import React, { useState, useEffect, FormEvent } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
@@ -17,7 +18,8 @@ import PeerPrepLogo from "@/components/common/PeerPrepLogo";
 import bcrypt from "bcryptjs-react";
 import displayToast from "@/components/common/Toast";
 import { CLIENT_ROUTES } from "@/common/constants";
-import LogoLoadingComponent from "../common/LogoLoadingComponent";
+import z from "zod";
+import { is } from "date-fns/locale";
 
 export default function ForgotPasswordComponent() {
   // States
@@ -56,6 +58,11 @@ export default function ForgotPasswordComponent() {
       return;
     }
 
+    if (isEmailInvalid) {
+      displayToast("Please enter a valid email.", ToastType.ERROR);
+      return;
+    }
+
     try {
       setIsLoading(true);
       const res = await AuthService.sendPasswordResetEmail(email);
@@ -63,10 +70,7 @@ export default function ForgotPasswordComponent() {
         setIsSubmitted(true);
       }
     } catch (error) {
-      displayToast(
-        "Something went wrong. Please refresh and try again.",
-        ToastType.ERROR
-      );
+      setIsSubmitted(true);
     } finally {
       setIsLoading(false);
     }
@@ -98,11 +102,27 @@ export default function ForgotPasswordComponent() {
     }
   }
 
+  // Validation
+
+  const validateEmail = (value: string) => {
+    try {
+      z.string().email().min(3).max(254).parse(value);
+      return true;
+    } catch {
+      return false;
+    }
+  };
+
+  const isEmailInvalid = React.useMemo(() => {
+    if (email === "") return false;
+
+    return validateEmail(email) ? false : true;
+  }, [email]);
+
   useEffect(() => {
     setArePasswordsEqual(
       !(password !== checkPassword && password !== "" && checkPassword !== "")
     );
-
     if (password !== "" && checkPassword !== "" && password.length < 8) {
       setErrorMsg("Password should contain 8 characters or more.");
     } else if (!arePasswordsEqual) {
@@ -130,8 +150,7 @@ export default function ForgotPasswordComponent() {
   }, []);
 
   useEffect(() => {
-    // call api that takes in email and generates a token that
-    console.log("test");
+    // call api that takes in email and generates a token
   }, [isSubmitted]);
 
   return (
@@ -143,9 +162,8 @@ export default function ForgotPasswordComponent() {
             <CardHeader className="justify-center font-bold">
               Forgot Password
             </CardHeader>
-            <CardBody className="flex flex-col">
+            <CardBody className="flex flex-col items-center pt-5 space-y-5">
               <Divider />
-              <Spacer y={5} />
               <p className="flex text-center">
                 Enter your email address below:
               </p>
@@ -155,12 +173,13 @@ export default function ForgotPasswordComponent() {
                   sendPasswordResetEmail(e);
                 }}
               >
-                <Spacer y={5} />
                 <Input
+                  type="email"
                   placeholder="Email address"
                   onInput={(e) => {
                     setEmail(e.currentTarget.value);
                   }}
+                  isDisabled={isSubmitted}
                 />
                 <Spacer y={5} />
                 {!isSubmitted && (
@@ -172,18 +191,21 @@ export default function ForgotPasswordComponent() {
               {isSubmitted ? (
                 <>
                   <p className="text-success-500 text-sm py-5">
-                    A reset password email has been sent to your email address.
+                    If an account with this email address exists, you will
+                    receive an email with instructions on how to reset your
+                    password.
                   </p>
-                  <Button
-                    color="primary"
-                    onClick={() => {
-                      router.push(CLIENT_ROUTES.LOGIN);
-                    }}
-                  >
-                    Back to login
-                  </Button>
                 </>
               ) : null}
+
+              <Link
+                className="cursor-pointer"
+                onClick={() => {
+                  router.push(CLIENT_ROUTES.LOGIN);
+                }}
+              >
+                Back to login
+              </Link>
             </CardBody>
           </div>
         ) : (
@@ -217,9 +239,9 @@ export default function ForgotPasswordComponent() {
                     onClick={togglePasswordVisibility}
                   >
                     {isPasswordVisible ? (
-                      <Image src="/assets/eye-hide.svg" alt="" />
+                      <Image src="/assets/eye-hide.svg" />
                     ) : (
-                      <Image src="/assets/eye-show.svg" alt="" />
+                      <Image src="/assets/eye-show.svg" />
                     )}
                   </Button>
                 }
@@ -244,9 +266,9 @@ export default function ForgotPasswordComponent() {
                       onClick={() => toggleCheckPasswordVisibility()}
                     >
                       {isCheckPasswordVisible ? (
-                        <Image src="/assets/eye-hide.svg" alt="" />
+                        <Image src="/assets/eye-hide.svg" />
                       ) : (
-                        <Image src="/assets/eye-show.svg" alt="" />
+                        <Image src="/assets/eye-show.svg" />
                       )}
                     </Button>
                   }
