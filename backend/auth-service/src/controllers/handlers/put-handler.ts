@@ -58,7 +58,7 @@ const verifyUserEmail = async (request: Request, response: Response) => {
   } catch (error) {
     console.log(error);
     response.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-      error: "Internal Server Error",
+      error: "INTERNAL SERVER ERROR",
       message: "Email verification failed.",
     });
   }
@@ -85,7 +85,7 @@ const resendVerificationEmail = async (
     if (!user) {
       response.status(HttpStatusCode.NOT_FOUND).json({
         error: "NOT FOUND",
-        message: `User with email ${email}} cannot be found.`,
+        message: `User with email ${email} cannot be found.`,
       });
       return;
     }
@@ -124,7 +124,7 @@ const resendVerificationEmail = async (
   } catch (error) {
     console.log(error);
     response.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-      error: "Internal Server Error",
+      error: "INTERNAL SERVER ERROR",
       message: "Resend verification email failed.",
     });
   }
@@ -178,7 +178,7 @@ const sendPasswordResetEmail = async (request: Request, response: Response) => {
   } catch (error) {
     console.log(error);
     response.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-      error: "Internal Server Error",
+      error: "INTERNAL SERVER ERROR",
       message: "Send reset password failed.",
     });
   }
@@ -187,6 +187,14 @@ const sendPasswordResetEmail = async (request: Request, response: Response) => {
 const changePassword = async (request: Request, response: Response) => {
   try {
     const userId = request.params.id;
+
+    if (!request.body || Object.keys(request.body).length === 0) {
+      response.status(HttpStatusCode.BAD_REQUEST).json({
+        error: "BAD REQUEST",
+        message: "Request body is missing.",
+      });
+      return;
+    }
 
     // check no extra properties in the request body
     const receivedProperties = Object.keys(request.body);
@@ -226,9 +234,9 @@ const changePassword = async (request: Request, response: Response) => {
       });
 
       if (!user) {
-        response.status(HttpStatusCode.NOT_FOUND).json({
-          error: "NOT FOUND",
-          message: `User with id ${userId} cannot be found.`,
+        response.status(HttpStatusCode.FORBIDDEN).json({
+          error: "FORBIDDEN",
+          message: "You don't have the permission to change password.",
         });
         return;
       }
@@ -241,7 +249,7 @@ const changePassword = async (request: Request, response: Response) => {
       if (!isCorrectPassword) {
         response.status(HttpStatusCode.FORBIDDEN).json({
           error: "FORBIDDEN",
-          message: "You don't have the permission to change password",
+          message: "You don't have the permission to change password.",
         });
         return;
       }
