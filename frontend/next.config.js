@@ -3,7 +3,8 @@ const nextConfig = {
   experimental: {
     serverActions: true,
   },
-  reactStrictMode: false,
+  output: 'standalone',
+  reactStrictMode: false
 };
 
 module.exports = nextConfig;

@@ -49,7 +49,6 @@ export const SocketHandler = (socket: Socket) => {
   socket.on(
     SocketEvent.SEND_CODE_EVENT,
     (codeDict: { roomId: string; event: string; }) => {
-      console.log(codeDict);
       socket.to(codeDict.roomId).emit(SocketEvent.CODE_EVENT, codeDict.event);
     }
   )
@@ -112,14 +111,11 @@ export async function handleJoinRoom(socket: Socket, joinDict: { userId: string,
 
   socket.join(joinDict.roomId);
 
-  if (activeSessions.get(joinDict.roomId)) {
-    activeSessions.get(joinDict.roomId)?.push(joinDict.userId);
-  } else {
-    activeSessions.set(joinDict.roomId, [joinDict.userId]);
-  }
+  maintainActiveSessions(joinDict);
 
   // Broadcast to room that partner's connection is active
-  io.in(joinDict.roomId).emit(SocketEvent.PARTNER_CONNECTION, {userId: joinDict.userId, status: true });
+  if (validUsers.length == 2)
+    io.in(joinDict.roomId).emit(SocketEvent.PARTNER_CONNECTION, {userId: joinDict.userId, status: true });
 
   // Check redis cache for Editor content
   let cachedEditorContent = await RedisHandler.getEditorContent(joinDict.roomId);
@@ -143,6 +139,14 @@ export async function handleJoinRoom(socket: Socket, joinDict: { userId: string,
     io.in(joinDict.roomId).emit(SocketEvent.PARTNER_CONNECTION, {userId: joinDict.userId, status: false });
     socket.removeAllListeners();
   })
+}
+
+function maintainActiveSessions(joinDict: { userId: string; roomId: string; sessionEndTime: string; }) {
+  if (activeSessions.get(joinDict.roomId)) {
+    activeSessions.get(joinDict.roomId)?.push(joinDict.userId);
+  } else {
+    activeSessions.set(joinDict.roomId, [joinDict.userId]);
+  }
 }
 
 /**
