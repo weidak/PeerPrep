@@ -75,13 +75,20 @@ export default function QuestionTable({
       case "title":
         return (
           <>
-            <Link
-              href={`${CLIENT_ROUTES.QUESTIONS}/${item.id}`}
-              color="foreground"
-              className="hover:text-yellow text-sm"
-            >
-              {cellValue as string}
-            </Link>
+            {(readonly) ? (
+              <p color="foreground" className="text-sm">
+                {cellValue as string}
+              </p>
+            ) : (
+              <Link
+                href={`${CLIENT_ROUTES.QUESTIONS}/${item.id}`}
+                color="foreground"
+                className="hover:text-yellow text-sm"
+              >
+                {cellValue as string}
+              </Link>
+            )
+            }
           </>
         );
       case "complexity":
