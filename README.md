@@ -1,5 +1,10 @@
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/6BOvYMwN)
 
+# System Architecture
+
+![cs3219_overall_architecture-overall architecture drawio](https://github.com/weidak/PeerPrep/assets/70256674/ac7822a6-2574-433e-8348-ffc7d84a212b)
+
+More can be read in our [report.pdf](G05_Report.pdf)
 
 # Setting up our environment locally
 
