@@ -4,7 +4,7 @@
 
 ![cs3219_overall_architecture-overall architecture drawio](https://github.com/weidak/PeerPrep/assets/70256674/ac7822a6-2574-433e-8348-ffc7d84a212b)
 
-More can be read in our [report.pdf](G05_Report.pdf)
+More can be read in our [report](G05_Report.pdf).
 
 # Setting up our environment locally
 
